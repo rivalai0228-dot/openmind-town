@@ -2,7 +2,7 @@
  * Openmind 不設限的慢熟小鎮｜Google 試算表後台
  *
  * 使用方式（只要做一次）：
- * 1. 在這份試算表選「擴充功能 → Apps Script」，把這整段程式貼上、存檔。
+ * 1. 在 script.google.com 建立專案，把這整段程式貼上、存檔（SHEET_ID 填後台試算表的 ID）。
  * 2. 上方函式選單選「setup」，按「執行」，依畫面允許權限。
  *    → 會自動建立「打氣牆留言」和「造訪統計」兩個分頁。
  * 3. 右上角「部署 → 新增部署作業」，類型選「網頁應用程式」：
@@ -16,6 +16,10 @@
  * - 「腳印」欄是大家蓋腳印的總數，「造訪統計」是每棟房子被打開的總次數。
  */
 
+/** 後台試算表的 ID（網址 /d/ 後面那一串） */
+const SHEET_ID = '1PmUGmcuyueZeqS9on-iKwOQSDSVghVWLbneadP5j5Eg';
+const book = () => SpreadsheetApp.openById(SHEET_ID);
+
 const WALL_SHEET = '打氣牆留言';
 const STAT_SHEET = '造訪統計';
 const WALL_HEADERS = ['時間', '留言', '暱稱', '同意刊登', '上牆', '腳印', '編號', '來源'];
@@ -27,7 +31,7 @@ const MAX_TEXT = 80, MAX_NAME = 10;
 
 /** 第一次使用：建立分頁、標題、打勾框 */
 function setup() {
-  const ss = SpreadsheetApp.getActive();
+  const ss = book();
   let ws = ss.getSheetByName(WALL_SHEET) || ss.insertSheet(WALL_SHEET);
   if (ws.getLastRow() === 0) ws.appendRow(WALL_HEADERS);
   ws.setFrozenRows(1);
@@ -89,7 +93,7 @@ function submit(d) {
   const name = clean(d.name, MAX_NAME);
   if (!text) return { ok: false, error: 'empty' };
   if (d.website) return { ok: true }; // 防機器人欄位，真人不會填
-  const ws = SpreadsheetApp.getActive().getSheetByName(WALL_SHEET);
+  const ws = book().getSheetByName(WALL_SHEET);
   const id = 'm' + Utilities.getUuid().slice(0, 8);
   ws.appendRow([new Date(), text, name, d.agree ? '是' : '否', false, 0, id, 'web']);
   ws.getRange(ws.getLastRow(), 5).insertCheckboxes();
@@ -98,7 +102,7 @@ function submit(d) {
 
 /** 蓋腳印 / 收回腳印 */
 function paw(d) {
-  const ws = SpreadsheetApp.getActive().getSheetByName(WALL_SHEET);
+  const ws = book().getSheetByName(WALL_SHEET);
   const ids = ws.getRange(2, 7, Math.max(ws.getLastRow() - 1, 1), 1).getValues();
   for (let i = 0; i < ids.length; i++) {
     if (String(ids[i][0]) === String(d.id)) {
@@ -113,7 +117,7 @@ function paw(d) {
 
 /** 房子被打開一次 */
 function visit(d) {
-  const st = SpreadsheetApp.getActive().getSheetByName(STAT_SHEET);
+  const st = book().getSheetByName(STAT_SHEET);
   const rows = st.getRange(2, 1, Math.max(st.getLastRow() - 1, 1), 3).getValues();
   for (let i = 0; i < rows.length; i++) {
     if (rows[i][0] === d.id) {
@@ -128,7 +132,7 @@ function visit(d) {
 
 /** 已勾選上牆的留言（最新的在前，最多 100 則） */
 function getWall() {
-  const ws = SpreadsheetApp.getActive().getSheetByName(WALL_SHEET);
+  const ws = book().getSheetByName(WALL_SHEET);
   if (!ws || ws.getLastRow() < 2) return [];
   const rows = ws.getRange(2, 1, ws.getLastRow() - 1, WALL_HEADERS.length).getValues();
   const tz = Session.getScriptTimeZone() || 'Asia/Taipei';
@@ -146,7 +150,7 @@ function getWall() {
 }
 
 function getStats() {
-  const st = SpreadsheetApp.getActive().getSheetByName(STAT_SHEET);
+  const st = book().getSheetByName(STAT_SHEET);
   const out = {};
   if (!st || st.getLastRow() < 2) return out;
   st.getRange(2, 1, st.getLastRow() - 1, 3).getValues().forEach(r => { if (r[0]) out[r[0]] = Number(r[2]) || 0; });

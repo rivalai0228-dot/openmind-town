@@ -11,7 +11,7 @@ export const LINE_OA_URL = 'https://line.me/R/ti/p/@475loslw';
  * 有填：打氣牆留言直接進試算表、勾選上牆、腳印和造訪次數是所有人的總數。
  * 留空：維持舊做法（留言用 LINE 傳、打氣牆用下面的 CHEER_WALL）。
  */
-export const API_URL = '';
+export const API_URL = 'https://script.google.com/macros/s/AKfycbz1C9X6vOuxgs7_ebZffKcD860Y-dFfRTWaI2YcQzAsoBiSgo345mM0ruqhnp3yNhbX/exec';
 
 /** LINE 官方帳號 ID（傳留言單給吱吱用） */
 export const LINE_OA_ID = '@475loslw';
