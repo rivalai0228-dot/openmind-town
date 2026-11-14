@@ -247,3 +247,9 @@ label.check{flex-direction:row;align-items:flex-start;gap:8px;font-weight:500}
 label.check input{width:20px;height:20px;margin-top:2px;accent-color:#B4704E;flex:none}
 .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
 .paw-n{margin-left:2px;font-size:13px}
+
+/* 今日豆子推薦 */
+.bean .bean-notes{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 4px}
+.bean .bean-notes span{border:1.5px solid #B4704E;color:#7A4127;border-radius:999px;padding:4px 12px;font-size:14px;font-weight:700;background:#fff}
+.bean .bean-notes span.on{background:#B4704E;color:#fff}
+.bean .bean-line{font-size:18px;line-height:1.7;color:#3F322A;margin:6px 0}

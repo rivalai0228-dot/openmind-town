@@ -1,5 +1,5 @@
 /* 每棟房子打開後的內容。html() 產生畫面，bind() 綁定按鈕。 */
-import { CHEER_FORM_URL, CHEER_WALL, LINE_OA_ID, TODAY_DEAL, BAG_NOTE_ENABLED, CARDS, SW_CARDS, FLAVORS, PRICES, MARKETS, MARKET_CODE, TOPICS, BOOKS, SERVICES, STAMPS } from './config.js';
+import { CHEER_FORM_URL, CHEER_WALL, LINE_OA_ID, TODAY_DEAL, TODAY_BEAN, BAG_NOTE_ENABLED, CARDS, SW_CARDS, FLAVORS, PRICES, MARKETS, MARKET_CODE, TOPICS, BOOKS, SERVICES, STAMPS } from './config.js';
 import { apiOn, remote, refresh, sendPaw, submitCheer } from './api.js';
 import { $, $$, esc, escBr, save, persist, addStamp, stampCount, ensureCode, lineLink, copyText } from './store.js';
 import { buildings, teleportTo } from './world.js';
@@ -361,8 +361,14 @@ export function makePanels({ openPanel }) {
         $('#mood').oninput = e => ($('#moodVal').textContent = e.target.value);
         $('#moodBtn').onclick = () => {
           const v = +$('#mood').value;
-          const f = v <= 3 ? FLAVORS.calm : v <= 7 ? FLAVORS.steady : FLAVORS.bright;
-          $('#rec').innerHTML = `<div class="rec flip"><p class="muted">今天的你，適合</p><p class="wk big">${esc(f.name)}</p><p>${esc(f.why)}</p></div>`;
+          const B = TODAY_BEAN, m = v <= 3 ? B.moods.low : v <= 7 ? B.moods.mid : B.moods.high;
+          $('#rec').innerHTML = `<div class="rec flip bean">
+            <p class="muted">今天的你，適合</p>
+            <p class="wk big">${esc(B.name)}</p>
+            <div class="bean-notes">${B.notes.map(n => `<span class="${n === m.note ? 'on' : ''}">${esc(n)}</span>`).join('')}</div>
+            <p class="bean-line wk">${esc(m.line)}</p>
+            <p class="muted">${esc(B.desc)}</p>
+          </div>`;
           addStamp('mood');
         };
       },
