@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="color-scheme" content="light">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Openmind 不設限的慢熟小鎮</title>
+<meta name="description" content="一杯咖啡的時間，慢慢逛。抽一張祝福、選一杯今天的咖啡，逛遍小鎮集滿五個章。">
+<meta name="theme-color" content="#DCEBEF">
+<meta property="og:title" content="Openmind 不設限的慢熟小鎮">
+<meta property="og:description" content="一杯咖啡的時間，慢慢逛。抽祝福、選咖啡、集章換濾掛。">
+<meta property="og:image" content="img/zz_letsgo.png">
+<link rel="icon" href="img/zz_ok.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="modulepreload" href="lib/three.module.min.js">
+</head>
+<body>
+<canvas id="scene" tabindex="-1" aria-label="慢熟小鎮的立體地圖。可以用快速前往按鈕直接進入每一棟建築。"></canvas>
+
+<header id="hud">
+  <h1 id="brand"><small>OPENMIND</small><b class="wk">不設限的慢熟小鎮</b></h1>
+  <div class="hud-right">
+    <button id="goBtn" aria-label="快速前往建築">快速前往</button>
+    <button id="passBtn" aria-label="打開集章護照">
+      <span class="t">集章護照 <span id="passCount">0</span>/5</span>
+      <span class="dots" id="passDots" aria-hidden="true"></span>
+    </button>
+  </div>
+</header>
+
+<div id="zoomBox">
+  <button id="zin" aria-label="放大看局部">＋</button>
+  <button id="zout" aria-label="縮小看全貌">－</button>
+  <button id="zall" aria-label="切換小鎮全貌">全貌</button>
+</div>
+<div id="hint" aria-hidden="true">點房子或名牌就會走過去並進入</div>
+<button id="enter" class="btn">進入</button>
+
+<div id="mask"></div>
+<section id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" aria-hidden="true">
+  <div id="sheetHead">
+    <h2 id="sheetTitle" class="wk"></h2>
+    <button id="close" aria-label="關閉">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3F322A" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+  </div>
+  <div id="sheetBody"></div>
+</section>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<div id="intro">
+  <div class="box">
+    <img src="img/zz_letsgo.png" alt="吱吱社工師">
+    <h2 class="wk" style="margin:0;font-size:30px;line-height:1.3">歡迎來到<br>Openmind 不設限的慢熟小鎮</h2>
+    <p class="muted">一杯咖啡的時間，慢慢逛。抽一張祝福、選一杯今天的咖啡，逛遍小鎮每一棟房子、集滿五個章，下次購買時寄送一包濾掛咖啡。</p>
+    <button class="btn" id="start">開始逛小鎮</button>
+    <p class="muted" style="font-size:12px">手機：點地面走路、兩指縮放　電腦：點地面或用 WASD／方向鍵，Enter 進入</p>
+  </div>
+</div>
+
+<div id="err" hidden><p>你的瀏覽器沒辦法顯示立體小鎮，換個瀏覽器或更新後再試試看。</p></div>
+<noscript><div style="position:fixed;inset:0;z-index:50;background:#FBF7F0;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center">需要開啟 JavaScript 才能逛小鎮。</div></noscript>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
+
+</body></html>
