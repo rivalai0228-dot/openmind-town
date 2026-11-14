@@ -36,7 +36,6 @@ function setup() {
   if (ws.getLastRow() === 0) ws.appendRow(WALL_HEADERS);
   ws.setFrozenRows(1);
   ws.getRange(1, 1, 1, WALL_HEADERS.length).setFontWeight('bold').setBackground('#F3EADB');
-  ws.getRange('E2:E2000').insertCheckboxes();
   ws.setColumnWidth(2, 360); ws.setColumnWidth(1, 150);
   ws.getRange('B:B').setWrap(true);
 
@@ -51,6 +50,7 @@ function setup() {
   // 歡迎留言（已上牆）
   if (ws.getLastRow() === 1) {
     ws.appendRow([new Date(), '歡迎來到打氣小站！累了就在這裡坐一下，看看大家的打氣，也留一句給自己或別人。', '吱吱', '是', true, 0, 'zz-001', '吱吱']);
+    ws.getRange(ws.getLastRow(), 5).insertCheckboxes().setValue(true);
   }
 }
 
@@ -155,4 +155,35 @@ function getStats() {
   if (!st || st.getLastRow() < 2) return out;
   st.getRange(2, 1, st.getLastRow() - 1, 3).getValues().forEach(r => { if (r[0]) out[r[0]] = Number(r[2]) || 0; });
   return out;
+}
+
+/** 整理：拿掉多餘的空白打勾框，補上歡迎留言（執行一次即可） */
+function fixRows() {
+  const ws = book().getSheetByName(WALL_SHEET);
+  const max = ws.getMaxRows();
+  const colB = ws.getRange(1, 2, max, 1).getValues();
+  let last = 1;
+  for (let i = 0; i < colB.length; i++) if (String(colB[i][0]).trim()) last = i + 1;
+  if (max > last) ws.getRange(last + 1, 5, max - last, 1).removeCheckboxes();
+  const ids = last > 1 ? ws.getRange(2, 7, last - 1, 1).getValues().map(r => r[0]) : [];
+  if (ids.indexOf('zz-001') < 0) {
+    ws.getRange(last + 1, 1, 1, 8).setValues([[new Date(), '歡迎來到打氣小站！累了就在這裡坐一下，看看大家的打氣，也留一句給自己或別人。', '吱吱', '是', true, 0, 'zz-001', '吱吱']]);
+    ws.getRange(last + 1, 5).insertCheckboxes().setValue(true);
+  }
+}
+
+/** 整理：刪掉中間空白的列，讓留言從第 2 列開始排（執行一次即可） */
+function compactRows() {
+  const ws = book().getSheetByName(WALL_SHEET);
+  const last = ws.getLastRow();
+  if (last < 2) return;
+  const colB = ws.getRange(2, 2, last - 1, 1).getValues();
+  for (let i = colB.length - 1; i >= 0; i--) {
+    if (!String(colB[i][0]).trim()) {
+      let j = i; while (j > 0 && !String(colB[j - 1][0]).trim()) j--;
+      ws.deleteRows(j + 2, i - j + 1); i = j;
+    }
+  }
+  const max = ws.getMaxRows(), lr = ws.getLastRow();
+  if (max > lr) ws.getRange(lr + 1, 5, max - lr, 1).removeCheckboxes();
 }
