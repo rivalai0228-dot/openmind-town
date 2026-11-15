@@ -276,3 +276,10 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:#B4704E;fle
 .ord-total{margin:0;font-size:16px}
 .ord-total b{font-size:26px;color:#7A4127}
 .seg-note{flex-basis:100%;margin:2px 0 0;font-size:13px}
+
+/* 品牌 LOGO */
+#brand { padding: 6px 12px; line-height: 0; }
+#brand img { height: 44px; width: auto; display: block; }
+.intro-logo { width: min(300px, 80vw); height: auto !important; }
+@media (max-width: 420px) { #brand { padding: 5px 8px; } #brand img { height: 38px; } }
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
