@@ -3,6 +3,7 @@ import { FB_URL, FB_NAME, CHEER_FORM_URL, CHEER_WALL, LINE_OA_ID, TODAY_DEAL, TO
 import { apiOn, remote, refresh, sendPaw, submitCheer } from './api.js';
 import { $, $$, esc, escBr, save, persist, addStamp, stampCount, ensureCode, lineLink, copyText } from './store.js';
 import { buildings, teleportTo } from './world.js';
+import { calmPanel } from './calm.js';
 
 let drawn = null; // 目前抽到的祝福卡 {deck, i}（關掉面板再打開還會在）
 const DECKS = { all: () => CARDS, sw: () => SW_CARDS };
@@ -527,6 +528,8 @@ export function makePanels({ openPanel }) {
     },
 
     /* ---------- 打氣小站 ---------- */
+    calm: calmPanel,
+
     cheer: {
       title: '打氣小站',
       html: () => `

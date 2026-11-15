@@ -218,7 +218,21 @@ building('cheer', '打氣小站', 17, 3, g => {
   for (let i = 0; i < 5; i++) { const pw = mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.03, 10), '#B4704E', -0.6 + i * 0.5, 0.03, 2.8 + (i % 2) * 0.35, g); pw.castShadow = false; }
 }, [4.4, 4, 6.4]);
 
+/* 狗狗安定站（狗屋） */
+building('calm', '狗狗安定站', 0, -11, g => {
+  mesh(new THREE.BoxGeometry(4.2, 2.8, 3.8), '#E8F1EA', 0, 1.4, 0, g);
+  const r1 = mesh(new THREE.BoxGeometry(3.2, 0.25, 4.3), '#6E8063', -1.05, 3.35, 0, g); r1.rotation.z = 0.62;
+  const r2 = mesh(new THREE.BoxGeometry(3.2, 0.25, 4.3), '#6E8063', 1.05, 3.35, 0, g); r2.rotation.z = -0.62;
+  mesh(new THREE.CylinderGeometry(0.75, 0.75, 0.2, 16, 1, false, 0, Math.PI), '#3F322A', 0, 0.75, 1.92, g).rotation.x = Math.PI / 2;
+  mesh(new THREE.BoxGeometry(1.5, 0.75, 0.2), '#3F322A', 0, 0.38, 1.92, g);
+  const bone = new THREE.Group(); bone.position.set(0, 2.2, 2.0); g.add(bone);
+  mesh(new THREE.BoxGeometry(1.1, 0.24, 0.1), '#FFFFFF', 0, 0, 0, bone);
+  [[-0.55, 0.12], [-0.55, -0.12], [0.55, 0.12], [0.55, -0.12]].forEach(([x, y]) => mesh(new THREE.SphereGeometry(0.16, 8, 6), '#FFFFFF', x, y, 0, bone));
+  mesh(new THREE.CylinderGeometry(0.45, 0.4, 0.18, 14), '#B4704E', 2.7, 0.09, 1.6, g);
+}, [4.2, 3.8, 5.6]);
+
 /* 主要道路 */
+pathSeg(0, -9.1, 0, -1.4);
 pathSeg(0, 20, 0, 6); pathSeg(-9, 15.6, 9, 15.6);
 pathSeg(-5, 8.6, 5, 8.6); pathSeg(-5, 8.6, -5, -1.4); pathSeg(5, 8.6, 5, -1.4);
 pathSeg(-9, -1.4, 9, -1.4);
@@ -226,7 +240,7 @@ pathSeg(-17, 8.6, -5, 8.6); pathSeg(-17, 6.6, -17, 8.6);
 pathSeg(5, 8.6, 17, 8.6); pathSeg(17, 6.6, 17, 8.6);
 
 /* ---------- 霓虹燈：每棟房子的造訪次數 ---------- */
-const NEON_COLORS = { post: '#FF5C8A', roast: '#FFB23F', market: '#3FE0D0', library: '#7CC6FF', office: '#C59BFF', reading: '#9BF06B', cheer: '#FF9F6B' };
+const NEON_COLORS = { post: '#FF5C8A', roast: '#FFB23F', market: '#3FE0D0', library: '#7CC6FF', office: '#C59BFF', reading: '#9BF06B', cheer: '#FF9F6B', calm: '#5DD39E' };
 function neonCanvas(text, color) {
   const c = document.createElement('canvas'); c.width = 512; c.height = 160;
   const x = c.getContext('2d');
