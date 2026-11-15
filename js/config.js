@@ -252,6 +252,7 @@ export const CHEER_WALL = [
 /** 慢熟生活所：吱吱的介紹（取自粉專簡介與 Canva 網站的文字） */
 export const ABOUT = {
   hi: '嗨，我是吱吱社工師。',
+  motto: '享受當下，小小日常。',
   role: '社工師／動物輔助治療師／講師',
   lines: [
     '我提供健康照護資源、照顧者支持、兒童情緒社交、善意溝通與居家互動技巧相關的課程與分享。',
@@ -264,8 +265,14 @@ export const ABOUT = {
   },
   forWho: ['家裡有長輩要照顧的你', '陪孩子長大的爸爸媽媽', '身障者家庭的照顧者', '第一線的社工與照服員', '陪著老狗狗的你', '還有，常常忘了照顧自己的你'],
   dogs: [
-    ['泡芙', '黑柴，家裡的公主，生活悠閒，會跟著你在小鎮裡散步。'],
-    ['Coffee', '紅柴，和吱吱一起上課的治療犬。狗狗的穩定都不是理所當然的，牠累了，我們就讓牠休息。'],
+    ['泡芙', '黑柴，家裡的公主，生活悠閒。吱吱的圖卡裡常常有牠，在小鎮裡也會跟著你散步。'],
+  ],
+  /** 取自粉專圖卡上的句子 */
+  sayings: [
+    '社工的價值，在於看見人，陪伴改變，減少傷害。',
+    '在每一次聊天裡，都有很多專業正在發生。',
+    '照顧不是剝奪，而是適時提供支持。',
+    '每一次真誠的行動，都在替自己的人際關係存摺，多存下一份溫暖。',
   ],
   partners: '適合學校、社區、親子單位與照護相關場域合作，歡迎各式合作邀約。',
 };
@@ -285,6 +292,13 @@ export const ARTICLES = [
   { t: '一個失智家庭，往往不是只有一個人生病：那些一起被拖進照顧裡的人', d: '2026/05/25', url: 'https://careandbrewsocialwocker.blogspot.com/2026/05/blog-post_25.html', shelves: ['失智照顧', '照顧者支持', '長照資源'] },
   { t: '很多人以為「還沒忘記事情」就不是失智：其實失智症比你想得更早開始', d: '2026/05/23', url: 'https://careandbrewsocialwocker.blogspot.com/2026/05/blog-post_23.html', shelves: ['失智照顧', '樂齡生活'] },
   { t: '「他還能自己買菜，卻被騙走上百萬」：這其實已經是失智前兆', d: '2026/05/23', url: 'https://careandbrewsocialwocker.blogspot.com/2026/05/blog-post.html', shelves: ['失智照顧', '長照資源', '社工觀察'] },
+  { t: '失智盤點潛能：用環境支持尚存的能力，不剝奪可做的事情', d: '2026/11/07', kind: '圖卡', url: 'https://www.facebook.com/photo/?fbid=1064672093293948', shelves: ['失智照顧', '照顧者支持'] },
+  { t: '守護家人的安心：疑似失智長輩「順・撫・轉」溝通技巧', d: '2026/10/31', kind: '圖卡', url: 'https://www.facebook.com/photo/?fbid=1058073553953802', shelves: ['失智照顧', '情緒與人際'] },
+  { t: '長照 3.0 ABC 單位的定位與功能', d: '2026/08/02', kind: '圖卡', url: 'https://www.facebook.com/photo/?fbid=977624401998718', shelves: ['長照資源'] },
+  { t: '照顧管理專員 vs. 個案管理員：分工合作，陪伴每個家庭走得更穩', d: '2026/07/29', kind: '圖卡', url: 'https://www.facebook.com/photo/?fbid=974144549013370', shelves: ['長照資源', '照顧者支持'] },
+  { t: '社工的價值，在於看見人，陪伴改變，減少傷害', d: '2026/07/19', kind: '圖卡', url: 'https://www.facebook.com/photo/?fbid=965646693196489', shelves: ['社工觀察'] },
+  { t: '社工真的只是聊天嗎？那些看不見的專業，其實每天都在發生', d: '2026/07/18', kind: '圖卡', url: 'https://www.facebook.com/photo/?fbid=965243293236829', shelves: ['社工觀察'] },
+  { t: '樂齡人際關係課：每一次真誠的行動，都在替人際關係存摺', d: '2026/07/13', kind: '圖卡', url: 'https://www.facebook.com/photo/?fbid=961068106987681', shelves: ['樂齡生活', '情緒與人際'] },
   { t: '在這個高速世界，找回內在安定的反直覺練習', d: '2026/01/10', url: 'https://careandbrewsocialwocker.blogspot.com/2026/01/4_050128736.html', shelves: ['自我照顧', '情緒與人際'] },
   { t: '烘豆，一場無聲的生命哲學課：「此時此刻」的練習，藏在咖啡香裡', d: '2026/01/05', url: 'https://careandbrewsocialwocker.blogspot.com/2026/01/blog-post.html', shelves: ['咖啡與植物', '自我照顧'] },
 ];

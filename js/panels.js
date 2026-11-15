@@ -239,7 +239,8 @@ let _open = null;
 function closeDeal() { document.getElementById('dealPop')?.remove(); }
 addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('dealPop')) { e.stopImmediatePropagation(); closeDeal(); } }, true);
 
-const artLi = a => `<li><a href="${esc(a.url)}" target="_blank" rel="noopener"><b>${esc(a.t)}</b><small>${esc(a.d)}</small></a></li>`;
+const artLi = a => `<li><a href="${esc(a.url)}" target="_blank" rel="noopener"><b>${esc(a.t)}</b><small>${a.kind ? `<span class="kind">${esc(a.kind)}</span>` : ''}${esc(a.d)}</small></a></li>`;
+const ARTS = [...ARTICLES].sort((a, b) => b.d.localeCompare(a.d));
 
 export function makePanels({ openPanel }) {
   _open = openPanel;
@@ -471,7 +472,7 @@ export function makePanels({ openPanel }) {
     library: {
       title: '慢讀文章館',
       html: () => `
-        <p class="muted">吱吱社工師的觀察筆記，一杯咖啡的時間就能讀完。</p>
+        <p class="muted">吱吱社工師的觀察筆記和圖卡，一杯咖啡的時間就能讀完。</p>
         <a class="fb-card" href="${esc(FB_URL)}" target="_blank" rel="noopener">
           <span class="fb-ico"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21h3.1z"/></svg></span>
           <span class="fb-txt"><b>${esc(FB_NAME)}</b><small>到臉書粉專讀吱吱的最新文章</small></span>
@@ -482,15 +483,15 @@ export function makePanels({ openPanel }) {
           <span class="fb-txt"><b>不設限慢熟生活所｜部落格</b><small>比較長的文章都放在這裡</small></span>
           <span class="fb-go" aria-hidden="true">→</span>
         </a>
-        <h3 class="wk">最新文章</h3>
-        <ul class="arts">${ARTICLES.slice(0, 4).map(artLi).join('')}</ul>
+        <h3 class="wk">最新文章與圖卡</h3>
+        <ul class="arts">${ARTS.slice(0, 4).map(artLi).join('')}</ul>
         <h3 class="wk">依主題找文章</h3>
         <div class="shelves">${TOPICS.map(([t, c], i) => `<button class="shelf" data-i="${i}"><i style="background:${esc(c)}"></i>${esc(t)}</button>`).join('')}</div>
         <div id="shelfMsg" aria-live="polite"></div>`,
       bind() {
         $$('.shelf').forEach(el => (el.onclick = () => {
           const [t] = TOPICS[+el.dataset.i];
-          const list = ARTICLES.filter(a => a.shelves.includes(t));
+          const list = ARTS.filter(a => a.shelves.includes(t));
           $$('.shelf').forEach(x => x.classList.toggle('picked', x === el));
           $('#shelfMsg').innerHTML = `<div class="rec flip"><p class="wk mid">${esc(t)}</p>${
             list.length
@@ -620,6 +621,7 @@ export function makePanels({ openPanel }) {
       title: '慢熟生活所',
       html: () => `
         <div class="guide"><img src="img/zz_happy.png" alt="吱吱社工師"><p><span class="wk">${esc(ABOUT.hi)}</span><br><small class="muted">${esc(ABOUT.role)}</small></p></div>
+        <p class="motto wk">${esc(ABOUT.motto)}</p>
         <div class="about">${ABOUT.lines.map(l => `<p>${esc(l)}</p>`).join('')}</div>
         <section class="bag slow" aria-labelledby="slowT">
           <h3 id="slowT" class="wk">${esc(ABOUT.slow.title)}</h3>
@@ -628,6 +630,11 @@ export function makePanels({ openPanel }) {
         <section class="bag" aria-labelledby="forT">
           <h3 id="forT" class="wk">這個小鎮，想陪伴的是</h3>
           <ul class="list">${ABOUT.forWho.map(s => `<li>${esc(s)}</li>`).join('')}</ul>
+        </section>
+        <section class="bag sayings" aria-labelledby="sayT">
+          <h3 id="sayT" class="wk">吱吱圖卡上的話</h3>
+          ${ABOUT.sayings.map(s => `<blockquote class="wk">${esc(s)}</blockquote>`).join('')}
+          <a class="btn light" href="${esc(FB_URL)}&sk=photos" target="_blank" rel="noopener">看更多吱吱的圖卡</a>
         </section>
         <section class="bag" aria-labelledby="dogT">
           <h3 id="dogT" class="wk">小鎮裡的柴柴</h3>

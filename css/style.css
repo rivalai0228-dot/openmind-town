@@ -303,3 +303,7 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:#B4704E;fle
 .arts small{color:#8A7A6C;font-size:12px}
 .blog-ico{background:#6E8063!important;font-size:18px}
 .slow{background:#EEF1EA}
+
+.motto{margin:0;text-align:center;color:#7A4127;font-size:17px;letter-spacing:1px}
+.sayings blockquote{margin:0;padding:8px 12px;border-left:3px solid #B4704E;background:#fff;border-radius:0 10px 10px 0;line-height:1.6}
+.kind{display:inline-block;background:#6E8063;color:#fff;border-radius:99px;padding:0 6px;margin-right:6px;font-size:11px}
