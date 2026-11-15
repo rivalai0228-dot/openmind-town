@@ -47,10 +47,10 @@ export const TODAY_BEAN = {
  */
 export const PREORDER = {
   items: [
-    { id: 'one',  name: '體驗型｜單包',  market: 55,   regular: 60 },
+    { id: 'one',  name: '體驗型｜單包',  market: 60,   regular: 60 },
     { id: 'five', name: '分享型｜5 包',  market: 250,  regular: 280 },
     { id: 'ten',  name: '送禮型｜10 包', sub: '附禮盒＋祝福小卡', market: 550, regular: 570 },
-    { id: 'plan', name: '30 日・每日一句話盲抽濾掛', sub: '30 包，每包附一句吱吱寫的話', market: 1680, regular: 1680 },
+    { id: 'plan', name: '30 日・每日一句話盲抽濾掛', sub: '30 包，每包附一句吱吱寫的話・含運', market: 1680, regular: 1680, shipIncluded: true },
   ],
   plan: {
     title: '30 日・每日一句話盲抽濾掛',
@@ -86,14 +86,14 @@ export const TODAY_DEAL = {
   enabled: true,
   title: '今日優惠菜單',
   items: [
-    ['體驗型｜單包', '60', '55'],
+    ['體驗型｜單包', '60', ''],
     ['分享型｜5 包', '280', '250'],
     ['送禮型｜10 包', '570', '550', '附禮盒＋祝福小卡'],
   ],
   perks: [
     '市集現場：加 LINE 好友，當天結帳折 10 元',
     '市集現場：買 3 包以上，送一張手寫祝福小卡',
-    '集滿 5 個章，下次購買時寄送一包濾掛咖啡',
+    '集滿網站 5 個章，購買時送一張可愛小狗貼紙',
   ],
   note: '優惠內容以現場及 LINE 回覆為準',
 };

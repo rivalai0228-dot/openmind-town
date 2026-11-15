@@ -148,8 +148,8 @@ async function makePassImage(code) {
   x.fillStyle = '#7A4127'; x.font = `500 34px ${NS}`; x.fillText('兌換碼', 170, 572);
   x.fillStyle = '#3F322A'; x.font = `700 110px ${WK}`; x.fillText(code, 170, 620);
   x.fillStyle = '#3F322A'; x.font = `500 38px ${NS}`;
-  x.fillText('下次購買時，', 130, 805);
-  x.fillText('寄送一包濾掛咖啡給你。', 130, 860);
+  x.fillText('購買時出示這張卡，', 130, 805);
+  x.fillText('送你一張可愛小狗貼紙。', 130, 860);
   try { const im = await loadImg('img/zz_happy.png'); const h = 260, w = h * im.width / im.height; x.drawImage(im, W - 120 - w, 770, w, h); } catch (e) {}
   x.strokeStyle = '#D9C7AE'; x.lineWidth = 3; x.setLineDash([10, 10]); x.beginPath(); x.moveTo(130, H - 300); x.lineTo(W - 130, H - 300); x.stroke(); x.setLineDash([]);
   try { const lg = await loadImg('img/logo.png'); const lh = 170, lw = Math.min(W - 260, lh * lg.width / lg.height), lh2 = lw * lg.height / lg.width; x.drawImage(lg, (W - lw) / 2, H - 290 + (190 - lh2) / 2, lw, lh2); } catch (e) {}
@@ -354,12 +354,13 @@ export function makePanels({ openPanel }) {
           <div class="plan-card">
             <p class="plan-tag">吱吱推薦方案</p>
             <p class="wk plan-title">${esc(PREORDER.plan.title)}</p>
-            <p class="plan-price"><b class="wk">${PREORDER.plan.price.toLocaleString()}</b> 元</p>
+            <p class="plan-price"><b class="wk">${PREORDER.plan.price.toLocaleString()}</b> 元・30 包・含運</p>
             <p>${esc(PREORDER.plan.desc)}</p>
           </div>
           <fieldset class="seg"><legend>你是？</legend>
             <label><input type="radio" name="who" value="market" checked> 市集好友（享市集價）</label>
             <label><input type="radio" name="who" value="regular"> 一般預訂</label>
+            <p class="muted seg-note">市集好友會依加入 LINE 的時間，以及參與活動的留言互動來確認。</p>
           </fieldset>
           <div class="ord-items">${PREORDER.items.map(it => `
             <div class="ord-row" data-id="${it.id}">
@@ -396,7 +397,7 @@ export function makePanels({ openPanel }) {
             if (qty[it.id]) { sum += p * qty[it.id]; lines.push(`・${it.name} × ${qty[it.id]}（${(p * qty[it.id]).toLocaleString()} 元）`); }
           });
           $('#ordSum').textContent = sum.toLocaleString();
-          const ship = pick().includes('宅配');
+          const ship = pick().includes('宅配') && PREORDER.items.some(it => qty[it.id] && !it.shipIncluded);
           $('#ordShip').textContent = ship ? '，運費另計' : '';
           const note = $('#ordNote').value.trim();
           const msg = `【預訂單】${w === 'market' ? '市集好友' : '一般預訂'}\n${lines.join('\n')}\n商品小計：${sum.toLocaleString()} 元${ship ? '（運費另計）' : ''}\n取貨方式：${pick().replace('（運費另計）', '')}${note ? '\n備註：' + note : ''}`;
@@ -627,7 +628,7 @@ export function makePanels({ openPanel }) {
           <div class="stamps">${STAMPS.map(([k, t]) => `<div class="stamp ${save.stamps[k] ? 'on' : ''}" aria-label="${esc(t)}${save.stamps[k] ? '，已蓋章' : '，還沒蓋'}">${esc(t)}</div>`).join('')}</div>
           ${done
             ? `<div class="guide"><img src="img/zz_happy.png" alt=""><p>集滿了！謝謝你慢慢逛完小鎮。</p></div>
-               <div class="rec"><p>兌換碼 <b class="wk big">${esc(ensureCode())}</b></p><p class="muted">把下面這張「集章完成卡」傳到吱吱的 LINE 官方帳號，下次購買時寄送一包濾掛咖啡。</p></div>
+               <div class="rec"><p>兌換碼 <b class="wk big">${esc(ensureCode())}</b></p><p class="muted">把下面這張「集章完成卡」給吱吱看，或傳到吱吱的 LINE 官方帳號，購買時送你一張可愛小狗貼紙。</p></div>
                <div id="passImg" class="stack" aria-live="polite"><p class="muted">完成卡製作中…</p></div>`
             : `<p>已集 ${n} / ${total} 個章。抽祝福、寫祝福、心情咖啡、市集暗號，再加上逛遍每一棟房子，就能集滿。</p>
                <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="${buildings.length}" aria-valuenow="${visited}"><i style="width:${(visited / buildings.length) * 100}%"></i></div>

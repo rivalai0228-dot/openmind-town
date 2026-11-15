@@ -275,3 +275,4 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:#B4704E;fle
 .q-n{min-width:22px;text-align:center;font-weight:700;font-size:17px}
 .ord-total{margin:0;font-size:16px}
 .ord-total b{font-size:26px;color:#7A4127}
+.seg-note{flex-basis:100%;margin:2px 0 0;font-size:13px}
