@@ -339,6 +339,13 @@ export function makePanels({ openPanel }) {
       title: '烘豆小屋',
       html: () => `
         ${TODAY_DEAL.enabled ? `<button class="btn light deal-open" id="dealBtn">今日優惠菜單</button>` : ''}
+        <section class="bag brew" aria-labelledby="brewT">
+          <h3 id="brewT" class="wk">濾掛沖煮小卡</h3>
+          <p class="muted">烘焙 115/11/14・建議 115/11/28 沖煮。收到濾掛的朋友也可以看這張。</p>
+          <img class="brew-img" src="img/brew_card.jpg" loading="lazy" width="900" height="1269"
+            alt="濾掛沖煮小卡：每包濾掛建議二刀流，沖 180ml。開始前撕開封口、把掛耳掛在杯緣、搖平咖啡粉。第一步注水 40ml 悶蒸 30 秒；第二步再加入 70ml 到 110ml；第三步最後加入 70ml 沖到 180ml。">
+          <p class="muted">長按圖片可以儲存，或直接轉傳給收到濾掛的朋友。</p>
+        </section>
         ${BAG_NOTE_ENABLED ? `
         <section class="bag" aria-labelledby="bagT">
           <h3 id="bagT" class="wk">這包濾掛，要給誰？</h3>
