@@ -1,5 +1,5 @@
 /* 每棟房子打開後的內容。html() 產生畫面，bind() 綁定按鈕。 */
-import { FB_URL, FB_NAME, CHEER_FORM_URL, CHEER_WALL, LINE_OA_ID, TODAY_DEAL, TODAY_BEAN, PREORDER, BAG_NOTE_ENABLED, CARDS, SW_CARDS, FLAVORS, PRICES, MARKETS, MARKET_CODE, TOPICS, BOOKS, SERVICES, STAMPS } from './config.js';
+import { FB_URL, FB_NAME, CHEER_FORM_URL, CHEER_WALL, LINE_OA_ID, TODAY_DEAL, TODAY_BEAN, PREORDER, BAG_NOTE_ENABLED, CARDS, SW_CARDS, FLAVORS, PRICES, MARKETS, MARKET_CODE, TOPICS, BOOKS, SERVICES, ABOUT, STAMPS } from './config.js';
 import { apiOn, remote, refresh, sendPaw, submitCheer } from './api.js';
 import { $, $$, esc, escBr, save, persist, addStamp, stampCount, ensureCode, lineLink, copyText } from './store.js';
 import { buildings, teleportTo } from './world.js';
@@ -608,9 +608,21 @@ export function makePanels({ openPanel }) {
     office: {
       title: '慢熟生活所',
       html: () => `
-        <div class="guide"><img src="img/zz_break.png" alt=""><p>這棟房子還在慢慢蓋。未來會是照顧者可以停下來喘口氣的地方。</p></div>
-        <p><b>正在準備的服務</b></p>
-        <ul class="list">${SERVICES.map(s => `<li>${esc(s)}</li>`).join('')}</ul>
+        <div class="guide"><img src="img/zz_happy.png" alt="吱吱社工師"><p class="wk">${esc(ABOUT.hi)}</p></div>
+        <div class="about">${ABOUT.lines.map(l => `<p>${esc(l)}</p>`).join('')}</div>
+        <section class="bag" aria-labelledby="forT">
+          <h3 id="forT" class="wk">這個小鎮，想陪伴的是</h3>
+          <ul class="list">${ABOUT.forWho.map(s => `<li>${esc(s)}</li>`).join('')}</ul>
+        </section>
+        <section class="bag" aria-labelledby="dogT">
+          <h3 id="dogT" class="wk">小鎮裡的柴柴</h3>
+          ${ABOUT.dogs.map(([n, d]) => `<p><b>${esc(n)}</b>　${esc(d)}</p>`).join('')}
+        </section>
+        <section class="bag" aria-labelledby="svT">
+          <h3 id="svT" class="wk">慢慢蓋的服務</h3>
+          <p class="muted">這棟房子還在慢慢蓋，未來會是照顧者可以停下來喘口氣的地方。</p>
+          ${SERVICES.map(([t, d]) => `<div class="sv"><b>${esc(t)}</b><span>${esc(d)}</span></div>`).join('')}
+        </section>
         ${lineLink('想邀約講座或工作坊')}
         <p class="muted">若你正處在危機中，請直接撥打 <a href="tel:1925">1925 安心專線</a>或 <a href="tel:113">113 保護專線</a>。</p>`,
     },

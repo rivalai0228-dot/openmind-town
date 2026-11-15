@@ -321,7 +321,7 @@ for (let i = 0; i < 6; i++) {
 
 /* ---------- 散步的狗狗（原創低多邊形造型） ---------- */
 const DOG_TYPES = [
-  { name: '豆豆', body: '#D9894E', belly: '#FFF3E2', len: 1.1, leg: 0.38, ear: 'up', tail: 'curl' },
+  { name: 'Coffee', body: '#D9894E', belly: '#FFF3E2', len: 1.1, leg: 0.38, ear: 'up', tail: 'curl', lines: ['我是治療犬，今天上班中。', '摸我之前，先讓我聞聞你的手。', '我把頭轉開的時候，是想休息一下喔。', '累了就休息，這是吱吱教我的。'] },
   { name: '黑糖', body: '#2E2A28', belly: '#E9C9A0', len: 1.1, leg: 0.38, ear: 'up', tail: 'curl' },
   { name: '麻糬', body: '#F6F1E7', belly: '#FFFFFF', len: 1.1, leg: 0.38, ear: 'up', tail: 'curl' },
   { name: '阿福', body: '#E2B66B', belly: '#F2D9A8', len: 1.35, leg: 0.5, ear: 'flop', tail: 'long', s: 1.15 },

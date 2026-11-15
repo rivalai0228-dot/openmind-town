@@ -293,3 +293,7 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:#B4704E;fle
 .fb-go{font-size:20px;font-weight:700;color:#B4704E}
 
 .brew-img{width:100%;max-width:420px;height:auto;align-self:center;border-radius:12px;box-shadow:0 2px 10px rgba(63,50,42,.15);-webkit-touch-callout:default}
+
+.about p{margin:0 0 8px;line-height:1.75}
+.sv{display:flex;flex-direction:column;gap:2px;padding:8px 0;border-top:1px dashed #D9C7AE}
+.sv span{font-size:14px;color:#5E4E43}
