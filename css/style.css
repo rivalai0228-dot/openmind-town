@@ -297,3 +297,9 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:#B4704E;fle
 .about p{margin:0 0 8px;line-height:1.75}
 .sv{display:flex;flex-direction:column;gap:2px;padding:8px 0;border-top:1px dashed #D9C7AE}
 .sv span{font-size:14px;color:#5E4E43}
+
+.arts{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;text-align:left}
+.arts a{display:flex;flex-direction:column;gap:2px;background:#fff;border:1px solid #D9C7AE;border-radius:12px;padding:10px 12px;color:#3F322A;text-decoration:none;line-height:1.5}
+.arts small{color:#8A7A6C;font-size:12px}
+.blog-ico{background:#6E8063!important;font-size:18px}
+.slow{background:#EEF1EA}

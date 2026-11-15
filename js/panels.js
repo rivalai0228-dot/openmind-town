@@ -1,5 +1,5 @@
 /* 每棟房子打開後的內容。html() 產生畫面，bind() 綁定按鈕。 */
-import { FB_URL, FB_NAME, CHEER_FORM_URL, CHEER_WALL, LINE_OA_ID, TODAY_DEAL, TODAY_BEAN, PREORDER, BAG_NOTE_ENABLED, CARDS, SW_CARDS, FLAVORS, PRICES, MARKETS, MARKET_CODE, TOPICS, BOOKS, SERVICES, ABOUT, STAMPS } from './config.js';
+import { FB_URL, FB_NAME, CHEER_FORM_URL, CHEER_WALL, LINE_OA_ID, TODAY_DEAL, TODAY_BEAN, PREORDER, BAG_NOTE_ENABLED, CARDS, SW_CARDS, FLAVORS, PRICES, MARKETS, MARKET_CODE, TOPICS, BOOKS, SERVICES, ABOUT, BLOG_URL, ARTICLES, STAMPS } from './config.js';
 import { apiOn, remote, refresh, sendPaw, submitCheer } from './api.js';
 import { $, $$, esc, escBr, save, persist, addStamp, stampCount, ensureCode, lineLink, copyText } from './store.js';
 import { buildings, teleportTo } from './world.js';
@@ -239,6 +239,8 @@ let _open = null;
 function closeDeal() { document.getElementById('dealPop')?.remove(); }
 addEventListener('keydown', e => { if (e.key === 'Escape' && document.getElementById('dealPop')) { e.stopImmediatePropagation(); closeDeal(); } }, true);
 
+const artLi = a => `<li><a href="${esc(a.url)}" target="_blank" rel="noopener"><b>${esc(a.t)}</b><small>${esc(a.d)}</small></a></li>`;
+
 export function makePanels({ openPanel }) {
   _open = openPanel;
   return {
@@ -475,15 +477,24 @@ export function makePanels({ openPanel }) {
           <span class="fb-txt"><b>${esc(FB_NAME)}</b><small>到臉書粉專讀吱吱的最新文章</small></span>
           <span class="fb-go" aria-hidden="true">→</span>
         </a>
+        <a class="fb-card" href="${esc(BLOG_URL)}" target="_blank" rel="noopener">
+          <span class="fb-ico blog-ico" aria-hidden="true">✎</span>
+          <span class="fb-txt"><b>不設限慢熟生活所｜部落格</b><small>比較長的文章都放在這裡</small></span>
+          <span class="fb-go" aria-hidden="true">→</span>
+        </a>
+        <h3 class="wk">最新文章</h3>
+        <ul class="arts">${ARTICLES.slice(0, 4).map(artLi).join('')}</ul>
+        <h3 class="wk">依主題找文章</h3>
         <div class="shelves">${TOPICS.map(([t, c], i) => `<button class="shelf" data-i="${i}"><i style="background:${esc(c)}"></i>${esc(t)}</button>`).join('')}</div>
         <div id="shelfMsg" aria-live="polite"></div>`,
       bind() {
         $$('.shelf').forEach(el => (el.onclick = () => {
-          const [t, , url] = TOPICS[+el.dataset.i];
+          const [t] = TOPICS[+el.dataset.i];
+          const list = ARTICLES.filter(a => a.shelves.includes(t));
           $$('.shelf').forEach(x => x.classList.toggle('picked', x === el));
           $('#shelfMsg').innerHTML = `<div class="rec flip"><p class="wk mid">${esc(t)}</p>${
-            url
-              ? `<a class="btn" href="${esc(url)}" target="_blank" rel="noopener">去讀文章</a>`
+            list.length
+              ? `<ul class="arts">${list.map(artLi).join('')}</ul>`
               : `<p class="muted">這個書架的文章正在整理中，先到臉書粉專讀吱吱的文章吧。</p><a class="btn light" href="${esc(FB_URL)}" target="_blank" rel="noopener">前往 ${esc(FB_NAME)}</a>`
           }</div>`;
         }));
@@ -608,8 +619,12 @@ export function makePanels({ openPanel }) {
     office: {
       title: '慢熟生活所',
       html: () => `
-        <div class="guide"><img src="img/zz_happy.png" alt="吱吱社工師"><p class="wk">${esc(ABOUT.hi)}</p></div>
+        <div class="guide"><img src="img/zz_happy.png" alt="吱吱社工師"><p><span class="wk">${esc(ABOUT.hi)}</span><br><small class="muted">${esc(ABOUT.role)}</small></p></div>
         <div class="about">${ABOUT.lines.map(l => `<p>${esc(l)}</p>`).join('')}</div>
+        <section class="bag slow" aria-labelledby="slowT">
+          <h3 id="slowT" class="wk">${esc(ABOUT.slow.title)}</h3>
+          <p>${esc(ABOUT.slow.text)}</p>
+        </section>
         <section class="bag" aria-labelledby="forT">
           <h3 id="forT" class="wk">這個小鎮，想陪伴的是</h3>
           <ul class="list">${ABOUT.forWho.map(s => `<li>${esc(s)}</li>`).join('')}</ul>
@@ -623,6 +638,7 @@ export function makePanels({ openPanel }) {
           <p class="muted">這棟房子還在慢慢蓋，未來會是照顧者可以停下來喘口氣的地方。</p>
           ${SERVICES.map(([t, d]) => `<div class="sv"><b>${esc(t)}</b><span>${esc(d)}</span></div>`).join('')}
         </section>
+        <p class="muted">${esc(ABOUT.partners)}</p>
         ${lineLink('想邀約講座或工作坊')}
         <p class="muted">若你正處在危機中，請直接撥打 <a href="tel:1925">1925 安心專線</a>或 <a href="tel:113">113 保護專線</a>。</p>`,
     },
