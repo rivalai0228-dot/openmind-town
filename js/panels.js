@@ -1,5 +1,5 @@
 /* 每棟房子打開後的內容。html() 產生畫面，bind() 綁定按鈕。 */
-import { CHEER_FORM_URL, CHEER_WALL, LINE_OA_ID, TODAY_DEAL, TODAY_BEAN, PREORDER, BAG_NOTE_ENABLED, CARDS, SW_CARDS, FLAVORS, PRICES, MARKETS, MARKET_CODE, TOPICS, BOOKS, SERVICES, STAMPS } from './config.js';
+import { FB_URL, FB_NAME, CHEER_FORM_URL, CHEER_WALL, LINE_OA_ID, TODAY_DEAL, TODAY_BEAN, PREORDER, BAG_NOTE_ENABLED, CARDS, SW_CARDS, FLAVORS, PRICES, MARKETS, MARKET_CODE, TOPICS, BOOKS, SERVICES, STAMPS } from './config.js';
 import { apiOn, remote, refresh, sendPaw, submitCheer } from './api.js';
 import { $, $$, esc, escBr, save, persist, addStamp, stampCount, ensureCode, lineLink, copyText } from './store.js';
 import { buildings, teleportTo } from './world.js';
@@ -463,6 +463,11 @@ export function makePanels({ openPanel }) {
       title: '慢讀文章館',
       html: () => `
         <p class="muted">吱吱社工師的觀察筆記，一杯咖啡的時間就能讀完。</p>
+        <a class="fb-card" href="${esc(FB_URL)}" target="_blank" rel="noopener">
+          <span class="fb-ico"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21h3.1z"/></svg></span>
+          <span class="fb-txt"><b>${esc(FB_NAME)}</b><small>到臉書粉專讀吱吱的最新文章</small></span>
+          <span class="fb-go" aria-hidden="true">→</span>
+        </a>
         <div class="shelves">${TOPICS.map(([t, c], i) => `<button class="shelf" data-i="${i}"><i style="background:${esc(c)}"></i>${esc(t)}</button>`).join('')}</div>
         <div id="shelfMsg" aria-live="polite"></div>`,
       bind() {
@@ -472,7 +477,7 @@ export function makePanels({ openPanel }) {
           $('#shelfMsg').innerHTML = `<div class="rec flip"><p class="wk mid">${esc(t)}</p>${
             url
               ? `<a class="btn" href="${esc(url)}" target="_blank" rel="noopener">去讀文章</a>`
-              : `<p class="muted">這個書架的文章正在整理中，很快就會上架。</p>`
+              : `<p class="muted">這個書架的文章正在整理中，先到臉書粉專讀吱吱的文章吧。</p><a class="btn light" href="${esc(FB_URL)}" target="_blank" rel="noopener">前往 ${esc(FB_NAME)}</a>`
           }</div>`;
         }));
       },

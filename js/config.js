@@ -13,6 +13,10 @@ export const LINE_OA_URL = 'https://line.me/R/ti/p/@475loslw';
  */
 export const API_URL = 'https://script.google.com/macros/s/AKfycbz1C9X6vOuxgs7_ebZffKcD860Y-dFfRTWaI2YcQzAsoBiSgo345mM0ruqhnp3yNhbX/exec';
 
+/** Facebook 粉專（慢讀文章館會放這個連結） */
+export const FB_URL = 'https://www.facebook.com/profile.php?id=100092535025240';
+export const FB_NAME = 'Openmind不設限';
+
 /** LINE 官方帳號 ID（傳留言單給吱吱用） */
 export const LINE_OA_ID = '@475loslw';
 
