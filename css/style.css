@@ -253,3 +253,25 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:#B4704E;fle
 .bean .bean-notes span{border:1.5px solid #B4704E;color:#7A4127;border-radius:999px;padding:4px 12px;font-size:14px;font-weight:700;background:#fff}
 .bean .bean-notes span.on{background:#B4704E;color:#fff}
 .bean .bean-line{font-size:18px;line-height:1.7;color:#3F322A;margin:6px 0}
+
+/* ===== 預訂・寄送 ===== */
+.order .plan-card{background:#2F3B33;color:#F7F1E6;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.order .plan-card p{margin:0}
+.plan-tag{font-size:12px;letter-spacing:2px;color:#F2D27A;font-weight:700}
+.plan-title{font-size:21px;color:#fff}
+.plan-price b{font-size:30px;color:#F2D27A}
+.plan-card p:last-child{font-size:14px;line-height:1.7;color:#E8E1D6}
+.seg{border:0;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.seg legend{font-size:14px;font-weight:700;margin-bottom:6px;padding:0}
+.seg label{flex-direction:row;align-items:center;gap:6px;font-weight:500;background:#fff;border:1.5px solid #3F322A;border-radius:999px;padding:8px 14px;min-height:44px;font-size:14px}
+.seg input{accent-color:#B4704E;width:18px;height:18px}
+.ord-items{display:flex;flex-direction:column;gap:8px}
+.ord-row{display:flex;justify-content:space-between;align-items:center;gap:10px;background:#fff;border-radius:12px;padding:10px 12px}
+.ord-name{display:flex;flex-direction:column;gap:2px;font-size:15px}
+.ord-name small{font-size:12px;color:#6F6056}
+.ord-price{font-size:14px;color:#B4704E;font-weight:700}
+.qty{display:flex;align-items:center;gap:6px;flex:none}
+.qty button{width:40px;height:40px;border-radius:50%;border:1.5px solid #3F322A;background:#fff;font-size:18px;font-weight:700}
+.q-n{min-width:22px;text-align:center;font-weight:700;font-size:17px}
+.ord-total{margin:0;font-size:16px}
+.ord-total b{font-size:26px;color:#7A4127}

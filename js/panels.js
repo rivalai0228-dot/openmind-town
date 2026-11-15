@@ -1,5 +1,5 @@
 /* 每棟房子打開後的內容。html() 產生畫面，bind() 綁定按鈕。 */
-import { CHEER_FORM_URL, CHEER_WALL, LINE_OA_ID, TODAY_DEAL, TODAY_BEAN, BAG_NOTE_ENABLED, CARDS, SW_CARDS, FLAVORS, PRICES, MARKETS, MARKET_CODE, TOPICS, BOOKS, SERVICES, STAMPS } from './config.js';
+import { CHEER_FORM_URL, CHEER_WALL, LINE_OA_ID, TODAY_DEAL, TODAY_BEAN, PREORDER, BAG_NOTE_ENABLED, CARDS, SW_CARDS, FLAVORS, PRICES, MARKETS, MARKET_CODE, TOPICS, BOOKS, SERVICES, STAMPS } from './config.js';
 import { apiOn, remote, refresh, sendPaw, submitCheer } from './api.js';
 import { $, $$, esc, escBr, save, persist, addStamp, stampCount, ensureCode, lineLink, copyText } from './store.js';
 import { buildings, teleportTo } from './world.js';
@@ -349,8 +349,32 @@ export function makePanels({ openPanel }) {
         <div class="thermo"><span>1 有點累</span><span id="moodVal" class="wk">5</span><span>10 很有精神</span></div>
         <button class="btn" id="moodBtn">幫我選一杯</button>
         <div id="rec" aria-live="polite"></div>
-        <div class="prices">${PRICES.map(([n, p]) => `<div class="price"><span>${esc(n)}</span><b>${esc(p)}</b></div>`).join('')}</div>
-        ${lineLink('到 LINE 下單')}
+        <section class="bag order" aria-labelledby="ordT">
+          <h3 id="ordT" class="wk">預訂・寄送</h3>
+          <div class="plan-card">
+            <p class="plan-tag">吱吱推薦方案</p>
+            <p class="wk plan-title">${esc(PREORDER.plan.title)}</p>
+            <p class="plan-price"><b class="wk">${PREORDER.plan.price.toLocaleString()}</b> 元</p>
+            <p>${esc(PREORDER.plan.desc)}</p>
+          </div>
+          <fieldset class="seg"><legend>你是？</legend>
+            <label><input type="radio" name="who" value="market" checked> 市集好友（享市集價）</label>
+            <label><input type="radio" name="who" value="regular"> 一般預訂</label>
+          </fieldset>
+          <div class="ord-items">${PREORDER.items.map(it => `
+            <div class="ord-row" data-id="${it.id}">
+              <div class="ord-name"><b>${esc(it.name)}</b>${it.sub ? `<small>${esc(it.sub)}</small>` : ''}<span class="ord-price" data-id="${it.id}"></span></div>
+              <div class="qty"><button type="button" class="q-minus" aria-label="${esc(it.name)} 減一">－</button><output class="q-n" aria-live="polite">0</output><button type="button" class="q-plus" aria-label="${esc(it.name)} 加一">＋</button></div>
+            </div>`).join('')}
+          </div>
+          <fieldset class="seg"><legend>怎麼拿？</legend>
+            ${PREORDER.pickup.map((p, i) => `<label><input type="radio" name="pick" value="${esc(p)}" ${i ? '' : 'checked'}> ${esc(p)}</label>`).join('')}
+          </fieldset>
+          <label>想說的話或指定（可不填）<input type="text" id="ordNote" maxlength="40" autocomplete="off" placeholder="例如：要附給媽媽的祝福小卡"></label>
+          <p class="ord-total">商品小計 <b class="wk" id="ordSum">0</b> 元<span id="ordShip">，運費另計</span></p>
+          <a class="btn" id="ordSend" href="#" target="_blank" rel="noopener">用 LINE 傳預訂單給吱吱</a>
+          <p class="muted" id="ordMsg" aria-live="polite">吱吱收到後，會在 LINE 回覆總金額、運費和付款方式；收件資料到時再私訊就好。</p>
+        </section>
         <p class="muted">心情分數只拿來推薦咖啡，不會被記錄。</p>`,
       bind() {
         if (TODAY_DEAL.enabled) {
@@ -358,6 +382,36 @@ export function makePanels({ openPanel }) {
           if (save.dealSeen !== todayKey()) setTimeout(showDeal, 350);
         }
         if (BAG_NOTE_ENABLED) bagRender();
+        /* 預訂・寄送 */
+        const qty = {}; PREORDER.items.forEach(it => (qty[it.id] = 0));
+        const who = () => (document.querySelector('input[name=who]:checked') || {}).value || 'market';
+        const pick = () => (document.querySelector('input[name=pick]:checked') || {}).value || PREORDER.pickup[0];
+        const ordUpd = () => {
+          const w = who(); let sum = 0; const lines = [];
+          PREORDER.items.forEach(it => {
+            const p = w === 'market' ? it.market : it.regular;
+            const el = document.querySelector(`.ord-price[data-id="${it.id}"]`);
+            el.textContent = `${p.toLocaleString()} 元`;
+            document.querySelector(`.ord-row[data-id="${it.id}"] .q-n`).textContent = qty[it.id];
+            if (qty[it.id]) { sum += p * qty[it.id]; lines.push(`・${it.name} × ${qty[it.id]}（${(p * qty[it.id]).toLocaleString()} 元）`); }
+          });
+          $('#ordSum').textContent = sum.toLocaleString();
+          const ship = pick().includes('宅配');
+          $('#ordShip').textContent = ship ? '，運費另計' : '';
+          const note = $('#ordNote').value.trim();
+          const msg = `【預訂單】${w === 'market' ? '市集好友' : '一般預訂'}\n${lines.join('\n')}\n商品小計：${sum.toLocaleString()} 元${ship ? '（運費另計）' : ''}\n取貨方式：${pick().replace('（運費另計）', '')}${note ? '\n備註：' + note : ''}`;
+          $('#ordSend').href = `https://line.me/R/oaMessage/${encodeURIComponent(LINE_OA_ID)}/?${encodeURIComponent(msg)}`;
+          return sum;
+        };
+        $$('.ord-row').forEach(row => {
+          const id = row.dataset.id;
+          row.querySelector('.q-plus').onclick = () => { qty[id] = Math.min(20, qty[id] + 1); ordUpd(); };
+          row.querySelector('.q-minus').onclick = () => { qty[id] = Math.max(0, qty[id] - 1); ordUpd(); };
+        });
+        $$('input[name=who], input[name=pick]').forEach(r => (r.onchange = ordUpd));
+        $('#ordNote').oninput = ordUpd;
+        $('#ordSend').onclick = e => { if (!ordUpd()) { e.preventDefault(); $('#ordMsg').textContent = '先選要預訂的品項和數量喔。'; } else $('#ordMsg').textContent = '謝謝你！吱吱會在 LINE 回覆總金額、運費和付款方式。'; };
+        ordUpd();
         $('#mood').oninput = e => ($('#moodVal').textContent = e.target.value);
         $('#moodBtn').onclick = () => {
           const v = +$('#mood').value;

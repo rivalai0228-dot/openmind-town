@@ -41,6 +41,25 @@ export const TODAY_BEAN = {
   },
 };
 
+/**
+ * 烘豆小屋「預訂・寄送」窗口。訪客填好後，用 LINE 把預訂單傳給吱吱，吱吱回覆金額、運費與付款方式。
+ * market：市集好友價；regular：一般價。寄送運費另計。
+ */
+export const PREORDER = {
+  items: [
+    { id: 'one',  name: '體驗型｜單包',  market: 55,   regular: 60 },
+    { id: 'five', name: '分享型｜5 包',  market: 250,  regular: 280 },
+    { id: 'ten',  name: '送禮型｜10 包', sub: '附禮盒＋祝福小卡', market: 550, regular: 570 },
+    { id: 'plan', name: '30 日・每日一句話盲抽濾掛', sub: '30 包，每包附一句吱吱寫的話', market: 1680, regular: 1680 },
+  ],
+  plan: {
+    title: '30 日・每日一句話盲抽濾掛',
+    price: 1680,
+    desc: '每天一包濾掛咖啡，搭一句吱吱寫給你的話。拆開前不知道今天會抽到哪一句，像每天收到一份小小的祝福；一個月下來，就是 30 個為自己停下來的片刻。',
+  },
+  pickup: ['宅配寄送（運費另計）', '下次市集現場取貨'],
+};
+
 /** 舊的三種風味（目前沒有使用，保留備用） */
 export const FLAVORS = {
   calm:   { name: '焦糖・烘烤', why: '溫溫的、穩穩的，像一條毯子。今天先讓自己被接住。' },
