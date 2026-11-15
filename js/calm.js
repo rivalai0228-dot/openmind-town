@@ -1,6 +1,6 @@
 /* 狗狗安定站：安定訊號配對小遊戲（點選或拉線配對） */
-import { CALM_PAIRS } from './config.js';
-import { $, $$, esc } from './store.js';
+import { CALM_PAIRS } from './config.js?v=20261115b';
+import { $, $$, esc } from './store.js?v=20261115b';
 
 const shuffle = a => { const b = [...a]; for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
 const LINE_COLORS = ['#B4704E', '#6E8063', '#D99A3E', '#7C8FB0', '#B0607C', '#5E9C95', '#8A6A55'];

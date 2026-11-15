@@ -1,8 +1,8 @@
 /* 3D 小鎮：島、房子、霓虹燈、樹、雲、狗狗、角色。 */
 import * as THREE from '../lib/three.module.min.js';
-import { save, reducedMotion } from './store.js';
-import { CHEER_WALL } from './config.js';
-import { apiOn, remote } from './api.js';
+import { save, reducedMotion } from './store.js?v=20261115b';
+import { CHEER_WALL } from './config.js?v=20261115b';
+import { apiOn, remote } from './api.js?v=20261115b';
 
 export { THREE };
 

@@ -1,9 +1,9 @@
 /* 每棟房子打開後的內容。html() 產生畫面，bind() 綁定按鈕。 */
-import { FB_URL, FB_NAME, CHEER_FORM_URL, CHEER_WALL, LINE_OA_ID, TODAY_DEAL, TODAY_BEAN, PREORDER, BAG_NOTE_ENABLED, CARDS, SW_CARDS, FLAVORS, PRICES, MARKETS, MARKET_CODE, TOPICS, BOOKS, SERVICES, ABOUT, BLOG_URL, ARTICLES, STAMPS } from './config.js';
-import { apiOn, remote, refresh, sendPaw, submitCheer } from './api.js';
-import { $, $$, esc, escBr, save, persist, addStamp, stampCount, ensureCode, lineLink, copyText } from './store.js';
-import { buildings, teleportTo } from './world.js';
-import { calmPanel } from './calm.js';
+import { FB_URL, FB_NAME, CHEER_FORM_URL, CHEER_WALL, LINE_OA_ID, TODAY_DEAL, TODAY_BEAN, PREORDER, BAG_NOTE_ENABLED, CARDS, SW_CARDS, FLAVORS, PRICES, MARKETS, MARKET_CODE, TOPICS, BOOKS, SERVICES, ABOUT, BLOG_URL, ARTICLES, STAMPS } from './config.js?v=20261115b';
+import { apiOn, remote, refresh, sendPaw, submitCheer } from './api.js?v=20261115b';
+import { $, $$, esc, escBr, save, persist, addStamp, stampCount, ensureCode, lineLink, copyText } from './store.js?v=20261115b';
+import { buildings, teleportTo } from './world.js?v=20261115b';
+import { calmPanel } from './calm.js?v=20261115b';
 
 let drawn = null; // 目前抽到的祝福卡 {deck, i}（關掉面板再打開還會在）
 const DECKS = { all: () => CARDS, sw: () => SW_CARDS };

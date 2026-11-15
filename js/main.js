@@ -1,15 +1,15 @@
 /* 主程式：操作（點擊、鍵盤、縮放）、鏡頭、面板開關、畫面迴圈。 */
-import { $, save, persist, renderPass, onAllStamps, addStamp, toast, esc, reducedMotion } from './store.js';
-import { DOG_LINES } from './config.js';
-import { apiOn, refresh, sendVisit, onRemote } from './api.js';
+import { $, save, persist, renderPass, onAllStamps, addStamp, toast, esc, reducedMotion } from './store.js?v=20261115b';
+import { DOG_LINES } from './config.js?v=20261115b';
+import { apiOn, refresh, sendVisit, onRemote } from './api.js?v=20261115b';
 
 renderPass();
 
 /* ---------- 載入 3D 小鎮；瀏覽器不支援就顯示提示 ---------- */
 let W, makePanels;
 try {
-  W = await import('./world.js');
-  ({ makePanels } = await import('./panels.js'));
+  W = await import('./world.js?v=20261115b');
+  ({ makePanels } = await import('./panels.js?v=20261115b'));
 } catch (e) {
   console.error(e);
   $('#intro').hidden = true;
