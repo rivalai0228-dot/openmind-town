@@ -1,5 +1,5 @@
 /* 儲存與共用小工具：集章、造訪次數、按讚，只存在這台裝置的瀏覽器。 */
-import { STAMPS, BOOKS, STORAGE_KEY, LINE_OA_URL } from './config.js?v=20261115b';
+import { STAMPS, BOOKS, STORAGE_KEY, LINE_OA_URL } from './config.js?v=20261116a';
 
 export const $ = (s, root = document) => root.querySelector(s);
 export const $$ = (s, root = document) => [...root.querySelectorAll(s)];

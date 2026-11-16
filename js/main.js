@@ -1,15 +1,15 @@
 /* 主程式：操作（點擊、鍵盤、縮放）、鏡頭、面板開關、畫面迴圈。 */
-import { $, save, persist, renderPass, onAllStamps, addStamp, toast, esc, reducedMotion } from './store.js?v=20261115b';
-import { DOG_LINES } from './config.js?v=20261115b';
-import { apiOn, refresh, sendVisit, onRemote } from './api.js?v=20261115b';
+import { $, save, persist, renderPass, onAllStamps, addStamp, toast, esc, reducedMotion } from './store.js?v=20261116a';
+import { DOG_LINES } from './config.js?v=20261116a';
+import { apiOn, refresh, sendVisit, onRemote } from './api.js?v=20261116a';
 
 renderPass();
 
 /* ---------- 載入 3D 小鎮；瀏覽器不支援就顯示提示 ---------- */
 let W, makePanels;
 try {
-  W = await import('./world.js?v=20261115b');
-  ({ makePanels } = await import('./panels.js?v=20261115b'));
+  W = await import('./world.js?v=20261116a');
+  ({ makePanels } = await import('./panels.js?v=20261116a'));
 } catch (e) {
   console.error(e);
   $('#intro').hidden = true;
@@ -103,7 +103,7 @@ addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
 addEventListener('blur', () => { for (const k in keys) keys[k] = false; });
 
 /* ---------- 縮放（滾輪、兩指、按鈕） ---------- */
-let zoom = 1;
+let zoom = 1, zoomCur = 1;
 const ZMIN = 0.4, ZMAX = 1.8;
 const setZoom = z => (zoom = Math.min(ZMAX, Math.max(ZMIN, z)));
 $('#zin').onclick = () => setZoom(zoom * 0.8);
@@ -228,13 +228,14 @@ function updateNear() {
 function updateCamera(dt, portrait) {
   // 固定 40 度俯角 + 窄視角，畫面不變形；縮小時鏡頭往小鎮中心靠
   const asp = innerWidth / innerHeight;
-  const viewW = (portrait ? 21 : 40) * zoom;
+  zoomCur += (zoom - zoomCur) * (reducedMotion ? 1 : Math.min(1, dt * 6));
+  const viewW = (portrait ? 21 : 40) * zoomCur;
   const hHalf = Math.atan(Math.tan(HALF_VFOV) * asp);
   const D = viewW / 2 / Math.tan(hHalf);
-  const ov = THREE.MathUtils.clamp((zoom - 1.1) / 0.6, 0, 1);
+  const ov = THREE.MathUtils.clamp((zoomCur - 1.1) / 0.6, 0, 1);
   const fx = THREE.MathUtils.lerp(zz.pos.x * 0.85, 0, ov);
   const fz = THREE.MathUtils.lerp(zz.pos.z - (portrait ? 5 : 7.5), 1, ov);
-  camFocus.lerp(tmp.set(fx, 1, fz), reducedMotion ? 1 : Math.min(1, dt * 2.5));
+  camFocus.lerp(tmp.set(fx, 1, fz), reducedMotion ? 1 : Math.min(1, dt * 3));
   camOff.set(0, D * Math.sin(PITCH), D * Math.cos(PITCH));
   camera.position.copy(camFocus).add(camOff);
   scene.fog.near = D * 0.95; scene.fog.far = D * 1.9;

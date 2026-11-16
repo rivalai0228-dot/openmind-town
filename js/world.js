@@ -1,8 +1,8 @@
 /* 3D 小鎮：島、房子、霓虹燈、樹、雲、狗狗、角色。 */
 import * as THREE from '../lib/three.module.min.js';
-import { save, reducedMotion } from './store.js?v=20261115b';
-import { CHEER_WALL } from './config.js?v=20261115b';
-import { apiOn, remote } from './api.js?v=20261115b';
+import { save, reducedMotion } from './store.js?v=20261116a';
+import { CHEER_WALL } from './config.js?v=20261116a';
+import { apiOn, remote } from './api.js?v=20261116a';
 
 export { THREE };
 
@@ -13,26 +13,46 @@ export const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
 
 export const scene = new THREE.Scene();
-scene.background = new THREE.Color('#DCEBEF');
-scene.fog = new THREE.Fog('#DCEBEF', 45, 90);
+/* 天空：上淡藍、地平線奶白的漸層 */
+const skyTex = (() => {
+  const c = document.createElement('canvas'); c.width = 4; c.height = 256;
+  const x = c.getContext('2d'); const g = x.createLinearGradient(0, 0, 0, 256);
+  g.addColorStop(0, '#BFD8E6'); g.addColorStop(0.55, '#DCEBEF'); g.addColorStop(1, '#F3EEE3');
+  x.fillStyle = g; x.fillRect(0, 0, 4, 256);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+})();
+scene.background = skyTex;
+scene.fog = new THREE.Fog('#DCE9EA', 45, 90);
 export const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 200);
 
-scene.add(new THREE.HemisphereLight('#FFF6E8', '#B7C9A8', 1.6));
-const sun = new THREE.DirectionalLight('#FFF1DC', 2.2);
+/* 光：天光＋主光（有影子）＋反方向的淡藍補光，讓房子的三個面亮度不同、更有立體感 */
+scene.add(new THREE.HemisphereLight('#FFF6E8', '#9FB08E', 0.9));
+const sun = new THREE.DirectionalLight('#FFF1DC', 3.0);
 sun.position.set(-14, 24, 12);
 sun.castShadow = true;
-sun.shadow.mapSize.set(1024, 1024);
+sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.radius = 4;
+sun.shadow.bias = -0.0004;
+sun.shadow.normalBias = 0.03;
 Object.assign(sun.shadow.camera, { left: -30, right: 30, top: 30, bottom: -30, near: 1, far: 70 });
 scene.add(sun);
+const fill = new THREE.DirectionalLight('#CFE3F5', 0.55);
+fill.position.set(16, 10, -10);
+scene.add(fill);
+const rim = new THREE.DirectionalLight('#FFE9C9', 0.35);
+rim.position.set(4, 8, -20);
+scene.add(rim);
 
 /* ---------- 小工具 ---------- */
 const INK = '#3F322A';
 const matCache = new Map();
 /** 同色共用材質，省記憶體 */
 const M = c => {
-  if (!matCache.has(c)) matCache.set(c, new THREE.MeshStandardMaterial({ color: c, roughness: 0.9, flatShading: true }));
+  if (!matCache.has(c)) matCache.set(c, new THREE.MeshStandardMaterial({ color: c, roughness: 0.78, metalness: 0.02, flatShading: true }));
   return matCache.get(c);
 };
 function mesh(geo, color, x = 0, y = 0, z = 0, parent = scene) {
@@ -46,9 +66,18 @@ const rand = (a, b) => a + Math.random() * (b - a);
 
 /* ---------- 島與水面 ---------- */
 export const R = 24;
-export const ground = mesh(new THREE.CylinderGeometry(R, R - 1.5, 2, 64), [M('#C9A27E'), M('#CFDCC4'), M('#A98564')], 0, -1, 0);
-const water = new THREE.Mesh(new THREE.CircleGeometry(60, 64), new THREE.MeshStandardMaterial({ color: '#BFD9DE', roughness: 0.6 }));
-water.rotation.x = -Math.PI / 2; water.position.y = -1.6; scene.add(water);
+export const ground = mesh(new THREE.CylinderGeometry(R, R - 1.5, 2, 64), [M('#C9A27E'), M('#CBDCC0'), M('#A98564')], 0, -1, 0);
+/* 水面：有輕微起伏的波浪，會慢慢動 */
+const waterGeo = new THREE.PlaneGeometry(140, 140, 56, 56);
+const waterBase = waterGeo.attributes.position.array.slice();
+const water = new THREE.Mesh(waterGeo, new THREE.MeshStandardMaterial({ color: '#A8CFD8', roughness: 0.3, metalness: 0.1, flatShading: true }));
+water.rotation.x = -Math.PI / 2; water.position.y = -1.6; water.receiveShadow = true; scene.add(water);
+/* 岸邊的淺色波紋 */
+const shore = new THREE.Mesh(new THREE.RingGeometry(R + 0.3, R + 2.2, 72), new THREE.MeshBasicMaterial({ color: '#EAF4F5', transparent: true, opacity: 0.45 }));
+shore.rotation.x = -Math.PI / 2; shore.position.y = -1.55; scene.add(shore);
+/* 島的底部：讓島看起來浮在水上 */
+const under = mesh(new THREE.CylinderGeometry(R - 1.5, R - 4, 2.2, 64), '#8E6E52', 0, -3.1, 0);
+under.castShadow = false;
 
 /* ---------- 小路 ---------- */
 function pathSeg(x1, z1, x2, z2, w = 2.2) {
@@ -540,6 +569,7 @@ export function marker(p) {
 }
 
 /* ---------- 每一格畫面的動態 ---------- */
+let waterTick = 0;
 export function animateWorld(dt, t, { portrait, zzMoving }) {
   const motion = reducedMotion ? 0 : 1;
 
@@ -565,6 +595,19 @@ export function animateWorld(dt, t, { portrait, zzMoving }) {
     for (const bk of bookTops) bk.position.y = bk.userData.y + Math.sin(t * 2) * 0.12;
   }
   for (const c of clouds) { c.position.x += c.userData.v * dt; if (c.position.x > 55) c.position.x = -55; }
+
+  // 水面波浪（每兩格算一次，省效能）
+  if (motion && (waterTick = (waterTick + 1) % 2) === 0) {
+    const p = waterGeo.attributes.position.array;
+    for (let i = 0; i < p.length; i += 3) {
+      const x = waterBase[i], y = waterBase[i + 1];
+      p[i + 2] = Math.sin(x * 0.35 + t * 0.9) * 0.08 + Math.cos(y * 0.28 - t * 0.7) * 0.08 + Math.sin((x + y) * 0.15 + t * 0.5) * 0.06;
+    }
+    waterGeo.attributes.position.needsUpdate = true;
+    waterGeo.computeVertexNormals();
+    shore.material.opacity = 0.35 + Math.sin(t * 1.2) * 0.12;
+    shore.scale.setScalar(1 + Math.sin(t * 1.2) * 0.012);
+  }
   for (const d of dogs) updateDog(d, dt, t);
 
   // 直式手機上把名牌、霓虹燈放大，比較好點

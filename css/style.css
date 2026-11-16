@@ -85,14 +85,16 @@ button { font: inherit; color: inherit; cursor: pointer; }
 #enter.show { opacity: 1; transform: translateX(-50%) translateY(0); pointer-events: auto; }
 
 /* ---------- 面板 ---------- */
-#mask { position: fixed; inset: 0; background: rgba(40, 30, 24, .35); opacity: 0; pointer-events: none; transition: opacity .25s; z-index: 10; }
+#mask { position: fixed; inset: 0; background: rgba(40, 30, 24, .28); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); opacity: 0; pointer-events: none; transition: opacity .35s; z-index: 10; }
+#vignette { position: fixed; inset: 0; pointer-events: none; z-index: 1; background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 55%, rgba(60,45,30,.18) 100%); }
 #mask.show { opacity: 1; pointer-events: auto; }
 #sheet {
   position: fixed; z-index: 11; background: var(--cream); border: 1.5px solid var(--ink);
   display: flex; flex-direction: column; opacity: 0; pointer-events: none; visibility: hidden;
-  transition: transform .3s ease, opacity .3s, visibility 0s .3s;
+  box-shadow: 0 -10px 40px rgba(63, 50, 42, .22), 0 2px 0 rgba(255,255,255,.6) inset;
+  transition: transform .42s cubic-bezier(.22, 1, .36, 1), opacity .3s, visibility 0s .42s;
 }
-#sheet.show { opacity: 1; pointer-events: auto; visibility: visible; transition: transform .3s ease, opacity .3s, visibility 0s; }
+#sheet.show { opacity: 1; pointer-events: auto; visibility: visible; transition: transform .42s cubic-bezier(.22, 1, .36, 1), opacity .25s, visibility 0s; }
 @media (max-width: 719px) {
   #sheet { left: 0; right: 0; bottom: 0; max-height: 86vh; max-height: 86dvh; border-radius: 22px 22px 0 0; border-bottom: 0; transform: translateY(40px); padding-bottom: env(safe-area-inset-bottom); }
   #sheet.show { transform: translateY(0); }
@@ -343,3 +345,9 @@ label.check input{width:20px;height:20px;margin-top:2px;accent-color:#B4704E;fle
 #cmMsg{position:sticky;bottom:0;z-index:5}
 #cmMsg .rec{box-shadow:0 -4px 16px rgba(63,50,42,.18);max-height:42vh;overflow:auto;position:relative}
 .cm-x{position:absolute;top:6px;right:8px;border:0;background:none;font-size:20px;line-height:1;color:#5E4E43;cursor:pointer;padding:6px}
+
+/* 立體感：按鈕與卡片的柔和陰影 */
+.btn{box-shadow:0 3px 0 rgba(63,50,42,.18),0 6px 14px rgba(63,50,42,.12);transition:transform .15s,box-shadow .15s}
+.btn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(63,50,42,.18),0 3px 8px rgba(63,50,42,.1)}
+.bag,.rec,.fb-card,.arts a,.note{box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 4px 14px rgba(63,50,42,.08)}
+#sheetHead{background:linear-gradient(to bottom,rgba(255,255,255,.55),rgba(255,255,255,0))}

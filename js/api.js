@@ -1,5 +1,5 @@
 /* Google 試算表後台連線。config.js 的 API_URL 有填才會啟用；沒填就維持原本的做法。 */
-import { API_URL } from './config.js?v=20261115b';
+import { API_URL } from './config.js?v=20261116a';
 
 export const apiOn = () => !!API_URL;
 
