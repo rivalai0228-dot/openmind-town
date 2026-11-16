@@ -17,7 +17,7 @@
  */
 
 /** 後台試算表的 ID（網址 /d/ 後面那一串） */
-const SHEET_ID = '1PmUGmcuyueZeqS9on-iKwOQSDSVghVWLbneadP5j5Eg';
+const SHEET_ID = '在這裡貼上你的試算表 ID'; // 公開的 GitHub 不放真實 ID，Apps Script 裡的那份請保留真實 ID
 const book = () => SpreadsheetApp.openById(SHEET_ID);
 
 const WALL_SHEET = '打氣牆留言';
@@ -69,6 +69,7 @@ function doGet(e) {
 function doPost(e) {
   let d = {};
   try { d = JSON.parse(e.postData.contents || '{}'); } catch (err) { return json({ ok: false, error: 'bad_json' }); }
+  if (tooMany(d.action)) return json({ ok: false, error: 'slow_down' });
   const lock = LockService.getScriptLock();
   try {
     lock.waitLock(8000);
@@ -81,6 +82,18 @@ function doPost(e) {
   } finally {
     try { lock.releaseLock(); } catch (e2) {}
   }
+}
+
+/** 防灌爆：每 10 分鐘全站上限（留言 30 則、腳印 300 次、造訪 1000 次） */
+const LIMITS = { submit: 30, paw: 300, visit: 1000 };
+function tooMany(action) {
+  const max = LIMITS[action];
+  if (!max) return false;
+  const cache = CacheService.getScriptCache();
+  const key = 'rl_' + action + '_' + Math.floor(Date.now() / 600000);
+  const n = Number(cache.get(key) || 0) + 1;
+  cache.put(key, String(n), 700);
+  return n > max;
 }
 
 function clean(s, max) {
